@@ -5,6 +5,7 @@
  */
 package c.dp_emailserver;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -12,20 +13,32 @@ import java.util.Objects;
  * @author Michael Lawson
  */
 public class Email {
-    private User sender;
-    private String message;
+    private String sender; //email address of the email's sender
+    private String subject; //subject of the email
+    private String message; //message of the email
+    private String[] recipients; //the email addresses of the people that receive the email
 
-    public Email(User sender, String message) {
+    public Email(String sender, String subject, String message, String[] recipients) {
         this.sender = sender;
+        this.subject = subject;
         this.message = message;
+        this.recipients = recipients;
     }
 
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getMessage() {
@@ -36,11 +49,21 @@ public class Email {
         this.message = message;
     }
 
+    public String[] getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(String[] recipients) {
+        this.recipients = recipients;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.sender);
-        hash = 79 * hash + Objects.hashCode(this.message);
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.sender);
+        hash = 17 * hash + Objects.hashCode(this.subject);
+        hash = 17 * hash + Objects.hashCode(this.message);
+        hash = 17 * hash + Arrays.deepHashCode(this.recipients);
         return hash;
     }
 
@@ -56,10 +79,16 @@ public class Email {
             return false;
         }
         final Email other = (Email) obj;
+        if (!Objects.equals(this.sender, other.sender)) {
+            return false;
+        }
+        if (!Objects.equals(this.subject, other.subject)) {
+            return false;
+        }
         if (!Objects.equals(this.message, other.message)) {
             return false;
         }
-        if (!Objects.equals(this.sender, other.sender)) {
+        if (!Arrays.deepEquals(this.recipients, other.recipients)) {
             return false;
         }
         return true;
@@ -67,8 +96,9 @@ public class Email {
 
     @Override
     public String toString() {
-        return "Email{" + "sender=" + sender + ", message=" + message + '}';
+        return "Email{" + "sender=" + sender + ", subject=" + subject + ", message=" + message + ", recipients=" + recipients + '}';
     }
+    
     
     
 }

@@ -21,22 +21,22 @@ public class UserManager {
 
     public String Register(User u) {
         if (UserMap.isEmpty()) {
-            UserMap.put(u.getEmail(), u);
+            UserMap.put(u.getUsername(), u);
             return "Registered SuccessFully";
         }
 
-        if (UserMap.containsKey(u.getEmail())) {
+        if (UserMap.containsKey(u.getUsername())) {
             return "Email Already In Use";
         } else {
-            UserMap.put(u.getEmail(), u);
+            UserMap.put(u.getUsername(), u);
             return "Registered SuccessFully";
         }
     }
     
     public boolean Login(User u){
         User user;
-        if(UserMap.containsKey(u.getEmail())){
-            user = (User)UserMap.get(u.getEmail());
+        if(UserMap.containsKey(u.getUsername())){
+            user = (User)UserMap.get(u.getUsername());
             if(user.getPassword().equalsIgnoreCase(u.getPassword())){
                 return true;
             }else{

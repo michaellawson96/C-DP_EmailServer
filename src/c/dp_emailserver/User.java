@@ -12,20 +12,20 @@ import java.util.Objects;
  * @author arche
  */
 public class User {
-    private String email;
+    private String username;
     private String password;
 
-    public User(String email, String password) {
-        this.email = email;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) { 
+        this.username = username;
     }
 
     public String getPassword() {
@@ -39,7 +39,7 @@ public class User {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.email);
+        hash = 71 * hash + Objects.hashCode(this.username);
         hash = 71 * hash + Objects.hashCode(this.password);
         return hash;
     }
@@ -56,7 +56,7 @@ public class User {
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.email, other.email)) {
+        if (!Objects.equals(this.username, other.username)) {
             return false;
         }
         if (!Objects.equals(this.password, other.password)) {
@@ -67,7 +67,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "email=" + email + ", password=" + password;
+        return "email=" + username + ", password=" + password;
     }
     
     

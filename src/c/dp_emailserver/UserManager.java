@@ -19,17 +19,17 @@ public class UserManager {
         this.UserMap = new HashMap();
     }
 
-    public String Register(User u) {
+    public boolean Register(User u) {
         if (UserMap.isEmpty()) {
             UserMap.put(u.getUsername(), u);
-            return "Registered SuccessFully";
+            return true;
         }
 
         if (UserMap.containsKey(u.getUsername())) {
-            return "Email Already In Use";
+            return false;
         } else {
             UserMap.put(u.getUsername(), u);
-            return "Registered SuccessFully";
+            return true;
         }
     }
     

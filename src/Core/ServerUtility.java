@@ -5,9 +5,6 @@
  */
 package Core;
 
-import c.dp_emailserver.Email;
-import c.dp_emailserver.User;
-
 /**
  *
  * @author SeppQ
@@ -32,6 +29,9 @@ public class ServerUtility {
     public final static String EMAIL_SEPARATOR_CHAR = "~~";
     public final static String EMAIL_RECIPITENTS_CHAR = "%%";
     public final static String USER_CHAR = "%%";
+    
+    public final static String LOGIN = "login";
+    public final static String REGISTER = "register";
     
     public final static String USER_LOGIN_SUCCESS = "Welcome";
     public final static String USER_LOGIN_FAILED = "password or email incorrect";

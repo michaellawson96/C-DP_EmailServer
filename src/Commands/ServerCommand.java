@@ -6,11 +6,13 @@
 package Commands;
 
 import c.dp_emailserver.EmailManager;
+import c.dp_emailserver.UserManager;
 
 /**
  *
  * @author SeppQ
  */
 public interface ServerCommand {
-    public String executeEmails(EmailManager mails, String [] msgArray);
+    public String execute(EmailManager mails,UserManager user, String [] msgArray);
+
 }

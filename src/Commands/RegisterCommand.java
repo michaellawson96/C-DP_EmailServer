@@ -6,27 +6,30 @@
 package Commands;
 
 import Core.ServerUtility;
-import c.dp_emailserver.User;
+import c.dp_emailserver.EmailManager;
+import Core.User;
 import c.dp_emailserver.UserManager;
 
 /**
  *
  * @author SeppQ
  */
-public class RegisterCommand implements ServerUserCommands {
-        @Override
-    public String executeUser(UserManager user , String[] msgArray){
+public class RegisterCommand implements ServerCommand {
+
+    @Override
+    public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response = "";
-        
+
         User u = ServerUtility.parseUser(msgArray[1]);
-        if(u != null){
-            
-            if(user.Register(u)){
+        if (u != null) {
+
+            if (user.Register(u)) {
                 response = ServerUtility.USER_REGISTER_SUCCESS;
-            }else{
+            } else {
                 response = ServerUtility.USER_REGISTER_FAILED;
-            }          
+            }
         }
         return response;
-    }         
+    }
+
 }

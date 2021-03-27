@@ -5,6 +5,7 @@
  */
 package c.dp_emailserver;
 
+import Core.Email;
 import java.util.ArrayList;
 import java.util.HashMap;
 

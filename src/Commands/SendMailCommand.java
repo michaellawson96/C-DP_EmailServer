@@ -6,27 +6,28 @@
 package Commands;
 
 import Core.ServerUtility;
-import c.dp_emailserver.Email;
+import Core.Email;
 import c.dp_emailserver.EmailManager;
+import c.dp_emailserver.UserManager;
 
 /**
  *
  * @author SeppQ
  */
-public class SendMailCommand implements ServerCommand{
+public class SendMailCommand implements ServerCommand {
 
     @Override
-    public String executeEmails(EmailManager mails, String[] msgArray) {
+    public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response;
-        
+
         //Parse and store email
         Email e = ServerUtility.parseEmail(msgArray[1]);
-        if(e != null){
+        if (e != null) {
             mails.sendEmail(e);
             response = ServerUtility.SUCCESSFUL_SEND;
-        }else{
+        } else {
             response = ServerUtility.FAILED_SEND;
-        }        
+        }
         return response;
     }
 

@@ -7,6 +7,7 @@ package Commands;
 
 import Core.ServerUtility;
 import c.dp_emailserver.EmailManager;
+import c.dp_emailserver.UserManager;
 
 /**
  *
@@ -14,7 +15,8 @@ import c.dp_emailserver.EmailManager;
  */
 public class ExitCommand implements ServerCommand{
     @Override
-    public String executeEmails(EmailManager mails, String[] msgArray) {
+    public String execute(EmailManager mails,UserManager user, String[] msgArray) {
         return ServerUtility.EXIT_ACCEPTED;
     }    
+
 }

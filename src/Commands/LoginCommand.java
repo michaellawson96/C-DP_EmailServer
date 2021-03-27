@@ -6,16 +6,17 @@
 package Commands;
 
 import Core.ServerUtility;
-import c.dp_emailserver.User;
+import c.dp_emailserver.EmailManager;
+import Core.User;
 import c.dp_emailserver.UserManager;
 
 /**
  *
  * @author SeppQ
  */
-public class LoginCommand implements ServerUserCommands {
+public class LoginCommand implements ServerCommand {
     @Override
-    public String executeUser(UserManager user , String[] msgArray){
+    public String execute(EmailManager mails ,UserManager user , String[] msgArray){
         String response = "";
         
         User u = ServerUtility.parseUser(msgArray[1]);
@@ -29,4 +30,5 @@ public class LoginCommand implements ServerUserCommands {
         }
         return response;
     }          
+
 }

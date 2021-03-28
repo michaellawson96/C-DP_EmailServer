@@ -8,7 +8,7 @@ package Commands;
 import Core.Email;
 import Core.ServerUtility;
 import c.dp_emailserver.EmailManager;
-import c.dp_emailserver.StringifyEmailList;
+
 import c.dp_emailserver.UserManager;
 import java.util.ArrayList;
 
@@ -18,12 +18,12 @@ import java.util.ArrayList;
  */
 public class ViewSentEmailsCommand implements ServerCommand {
 
-    StringifyEmailList sel = new StringifyEmailList();
+
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response = "";
         ArrayList<Email> sentEmails = mails.getSentEmails(msgArray[1]);
-        
-        return sel.stringify(sentEmails);
+        response = ServerUtility.stringify(sentEmails);
+        return response; 
     }
 }

@@ -6,8 +6,8 @@
 package Commands;
 
 import Core.Email;
+import Core.ServerUtility;
 import c.dp_emailserver.EmailManager;
-import c.dp_emailserver.StringifyEmailList;
 import c.dp_emailserver.UserManager;
 import java.util.ArrayList;
 
@@ -16,12 +16,12 @@ import java.util.ArrayList;
  * @author SeppQ
  */
 public class ViewReadEmailsCommand implements ServerCommand{
-    StringifyEmailList sel = new StringifyEmailList();
+
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response = "";
         ArrayList<Email> readEmails = mails.getReadEmails(msgArray[1]);
-        
-        return sel.stringify(readEmails);
+        response = ServerUtility.stringify(readEmails);
+        return response; 
     }
 }

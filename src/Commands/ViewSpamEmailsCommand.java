@@ -8,7 +8,7 @@ package Commands;
 import Core.Email;
 import Core.ServerUtility;
 import c.dp_emailserver.EmailManager;
-import c.dp_emailserver.StringifyEmailList;
+
 import c.dp_emailserver.UserManager;
 import java.util.ArrayList;
 
@@ -17,12 +17,12 @@ import java.util.ArrayList;
  * @author SeppQ
  */
 public class ViewSpamEmailsCommand implements ServerCommand {
-    StringifyEmailList sel = new StringifyEmailList();
+
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response = "";
         ArrayList<Email> spamEmails = mails.getSpamEmails(msgArray[1]);
-        
-        return sel.stringify(spamEmails);
+        response = ServerUtility.stringify(spamEmails);
+        return response; 
     }
 }

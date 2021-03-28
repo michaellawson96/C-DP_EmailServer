@@ -7,7 +7,13 @@ package c.dp_emailserver;
 
 import Core.MySocket;
 import Core.ServerUtility;
+import Core.User;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Scanner;
 
 /**
  *
@@ -30,6 +36,8 @@ public class ServerApp {
         this.um = new UserManager();
         try
         {
+            ReadingFromFile(um);
+            Scanner sc = new Scanner(System.in);
             System.out.println("---- SERVER ----");
             // Create listening socket to accept connections through
             ServerSocket serverSocket = new ServerSocket(ServerUtility.SERVER_PORT);
@@ -45,10 +53,46 @@ public class ServerApp {
                 Thread clientWorker = new Thread(clientHandlerJob);
                 // Start handler working with client
                 clientWorker.start();
+                
+                System.out.println("Type anthing to stop server");
+                sc.next();
+                writeUsertoFile(um);
             }
         } catch (Exception e)
         {
             e.printStackTrace();
         }
     }
+        
+    public static void writeUsertoFile(UserManager um) {
+        BufferedWriter outputWriter = null;
+        try {
+            outputWriter = new BufferedWriter(new FileWriter("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
+            for (int i = 0; i < um.allUsers().size(); i++) {
+
+                outputWriter.write( um.allUsers().get(i) + ServerUtility.USER_CHAR);
+                outputWriter.newLine();
+            }
+            outputWriter.flush();
+            outputWriter.close();
+        } catch (IOException io) {
+            System.out.println("Something went wrong");
+        }
+    } 
+    
+    public static void ReadingFromFile(UserManager um) {
+        Scanner sc;
+        try {
+            sc = new Scanner(new File("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
+            while (sc.hasNext()) {
+                String[] components = sc.next().split(ServerUtility.USER_CHAR);
+                User u = new User(components[0],components[1]);
+                um.Register(u);
+            }
+            sc.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+    }    
 }

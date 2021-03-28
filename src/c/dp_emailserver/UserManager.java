@@ -6,6 +6,7 @@
 package c.dp_emailserver;
 
 import Core.User;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -47,4 +48,12 @@ public class UserManager {
             return false;
         }
     } 
+    
+    public ArrayList<User> allUsers(){
+        ArrayList<User> all = new ArrayList();
+        for(int i =0 ; i<UserMap.size();i++){
+            all.add((User)UserMap.get(i));
+        }
+        return all;
+    }
 }

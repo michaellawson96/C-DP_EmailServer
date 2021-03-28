@@ -8,6 +8,8 @@ package c.dp_client;
 import Core.MySocket;
 import Core.ServerUtility;
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -18,6 +20,24 @@ public class ClientApp {
 
     private Scanner sc = new Scanner(System.in);
     private MySocket dataSocket;
+    
+    
+    public static void main(String[] args) {
+        
+         ClientApp clientApp = new ClientApp();
+        try
+        {
+            clientApp.startApp();
+        } catch (UnknownHostException e)
+        {
+            System.out.println("Problem occured when finding host");
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            System.out.println("Problem occured when interacting with server");
+            e.printStackTrace();
+        }       
+    }
 
     public int chooseLoginRegister() {
         int opt = -1;
@@ -28,20 +48,34 @@ public class ClientApp {
             System.out.println("2) Register");
             System.out.println("3) Exit");
             System.out.println("________________________________________________");
-
+            try{
+                opt = sc.nextInt();
+                sc.nextLine();
+            }
+            catch(InputMismatchException e)
+            {
+                System.out.println("Please enter a number between 1 and 3 as indicated by the menu above.");
+                opt = -1;
+                sc.nextLine();
+            }
         } while (opt < 1 || opt > 3);
 
         return opt;
     }
 
     public void startApp() throws IOException {
+        Object email ;
         System.out.println("Welcome !!");
         dataSocket = new MySocket("localhost", ServerUtility.SERVER_PORT);
-        int opt = -1;
+        int opt;
         do {
-            switch (chooseLoginRegister()) {
+            opt = chooseLoginRegister();
+            switch (opt) {
                 case 1:
-                    login();
+                    email =  login();
+                    if(email instanceof String){
+                        System.out.println("Welcome " + email);
+                    }
                     break;
                 case 2:
                     register();
@@ -50,16 +84,16 @@ public class ClientApp {
                     System.out.println("Bye");
                     break;
             }
-        } while (chooseLoginRegister() != 3);
+        } while (opt != 3);
     }
 
-    public int login() {
+    public Object login() {
         System.out.println("Enter Your Email");
         String email = sc.nextLine();
         System.out.println("Enter Your Password");
         String password = sc.nextLine();
 
-        String message = ServerUtility.LOGIN + ServerUtility.USER_CHAR + email + ServerUtility.USER_CHAR + password;
+        String message = ServerUtility.LOGIN + ServerUtility.COMMAND_BREAKING_CHAR + email + ServerUtility.USER_CHAR + password;
 
         dataSocket.sendMessage(message);
 
@@ -67,7 +101,7 @@ public class ClientApp {
 
         if (response.equals(ServerUtility.USER_LOGIN_SUCCESS)) {
             System.out.println("You have loged in successfully");
-            return 1;
+            return email;
         } else if (response.equals(ServerUtility.USER_LOGIN_FAILED)) {
             System.out.println("Either email or password is incorrect");
             return 0;
@@ -83,16 +117,16 @@ public class ClientApp {
         System.out.println("Enter Your Password");
         String password = sc.nextLine();
 
-        String message = ServerUtility.REGISTER + ServerUtility.USER_CHAR + email + ServerUtility.USER_CHAR + password;
+        String message = ServerUtility.REGISTER + ServerUtility.COMMAND_BREAKING_CHAR + email + ServerUtility.USER_CHAR + password;
 
         dataSocket.sendMessage(message);
 
         String response = dataSocket.receiveMessage();
 
-        if (response.equals(ServerUtility.USER_LOGIN_SUCCESS)) {
+        if (response.equals(ServerUtility.USER_REGISTER_SUCCESS)) {
             System.out.println("You have registered in successfully");
             return 1;
-        } else if (response.equals(ServerUtility.USER_LOGIN_FAILED)) {
+        } else if (response.equals(ServerUtility.USER_REGISTER_FAILED)) {
             System.out.println("Email already exist");
             return 0;
         } else {

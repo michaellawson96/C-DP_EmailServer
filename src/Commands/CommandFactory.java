@@ -30,6 +30,33 @@ public class CommandFactory {
             case ServerUtility.VIEW_UNREAD_MAILS:
                 com = new ViewUnreadMailsCommand();
                 break;
+            case ServerUtility.DELETE_ALL_SPAM:
+                com = new DeleteAllSpamCommand();
+                break;
+            case ServerUtility.DELETE_SENT_EMAIL:
+                com = new DeleteSentEmailCommand();
+                break;
+            case ServerUtility.MOVE_TO_SPAM:
+                com = new MoveToSpamCommand();
+                break;
+            case ServerUtility.SEARCH_EMAIL:
+                com = new SearchEmailsCommand();
+                break;
+            case ServerUtility.VIEW_READ_EMAIL:
+                com = new ViewReadEmailsCommand();
+                break;
+            case ServerUtility.VIEW_SENT_EMAIL:
+                com = new ViewSentEmailsCommand();
+                break;
+            case ServerUtility.VIEW_SPAM_EMAIL:
+                com = new ViewSpamEmailsCommand();
+                break;
+            case ServerUtility.DELETE_RECEIVED_EMAIL:
+                com = new DeleteReceivedEmailCommand();
+                break;
+            case ServerUtility.MARK_UNREAD_AS_READ:
+                com = new MarkUnReadAsReadCommand();
+                break;
             default:
                 com = new InvalidCommand();
                 break;

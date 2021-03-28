@@ -32,12 +32,12 @@ public class ServerApp {
 
     public void startApp() {
         //used to store emails
-   
+
         this.em = new EmailManager();
         this.um = new UserManager();
-        ReadingFromFile(um);
+
         try {
-            
+            ReadingFromFile(um);
             Scanner sc = new Scanner(System.in);
             System.out.println("---- SERVER ----");
             // Create listening socket to accept connections through
@@ -54,18 +54,20 @@ public class ServerApp {
                 Thread clientWorker = new Thread(clientHandlerJob);
                 // Start handler working with client
                 clientWorker.start();
-
+                
+                
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
-            writeUsertoFile(um);
+            
         }
     }
 
     public static void writeUsertoFile(UserManager um) {
         BufferedWriter outputWriter = null;
         try {
-            outputWriter = new BufferedWriter(new FileWriter("..\\Users.txt"));
+            outputWriter = new BufferedWriter(new FileWriter("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
             for (int i = 0; i < um.allUsers().size(); i++) {
 
                 outputWriter.write(um.allUsers().get(i).getUsername() + ServerUtility.USER_CHAR + um.allUsers().get(i).getPassword());
@@ -73,6 +75,7 @@ public class ServerApp {
             }
             outputWriter.flush();
             outputWriter.close();
+            System.out.println("Writting users to file..");
         } catch (IOException io) {
             System.out.println("Something went wrong");
         }
@@ -81,16 +84,15 @@ public class ServerApp {
     public static void ReadingFromFile(UserManager um) {
         Scanner sc;
         try {
-            sc = new Scanner(new File("..\\Users.txt"));
+            sc = new Scanner(new File("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
             while (sc.hasNext()) {
                 String[] components = sc.next().split(ServerUtility.USER_CHAR);
                 User u = new User(components[0], components[1]);
-                System.out.println(u);
                 um.Register(u);
             }
             sc.close();
         } catch (Exception e) {
-            System.out.println("Something went wrong");
+            e.getMessage();
 
         }
     }

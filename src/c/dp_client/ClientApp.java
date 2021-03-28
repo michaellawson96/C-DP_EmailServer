@@ -115,7 +115,7 @@ public class ClientApp {
                 sc.nextLine();
             }
         } while (opt < 1 || opt > 4);
-
+        return opt;
     }
     
     public void startApp() throws IOException {

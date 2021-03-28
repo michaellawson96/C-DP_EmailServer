@@ -96,7 +96,7 @@ public class Email {
 
     @Override
     public String toString() {
-        return "Email{" + "sender=" + sender + ", subject=" + subject + ", message=" + message + ", recipients=" + recipients + '}';
+        return "Email{" + "sender=" + sender + ", subject=" + subject + ", message=" + message + ", recipients=" + recipients.toString() + '}';
     }
     
     

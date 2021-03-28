@@ -19,7 +19,7 @@ public class SendMailCommand implements ServerCommand {
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response;
-
+        
         //Parse and store email
         Email e = ServerUtility.parseEmail(msgArray[1]);
         if (e != null) {

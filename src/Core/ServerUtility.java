@@ -61,13 +61,16 @@ public class ServerUtility {
     {
         String [] components = email.split(EMAIL_COMPONENT_BREAKING_CHAR);
         // Structure: sender¬¬recipient¬¬subject¬¬body
-        String [] Recipitents = email.split(EMAIL_RECIPITENTS_CHAR);
+        
+        System.out.println("you got here");
+        String [] Recipitents = components[4].split(EMAIL_RECIPITENTS_CHAR);
         if(components.length == 4)
         {
             
             
             // Make an email from the components of the String
             Email e = new Email(components[0], components[1], components[2],Recipitents);
+            System.out.println(e.toString());
             return e;
         }
         return null;

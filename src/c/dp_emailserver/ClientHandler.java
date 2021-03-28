@@ -43,6 +43,11 @@ public class ClientHandler implements Runnable {
 
         while (!message.equals(ServerUtility.EXIT)) {
             message = client.receiveMessage();
+            
+            //TO BE REMOVED
+            System.out.println(message);
+            //TO BE REMOVED
+            
             String response = executeCommand(message);
             client.sendMessage(response);
         }

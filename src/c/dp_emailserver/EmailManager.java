@@ -286,4 +286,18 @@ public class EmailManager {
     public void deleteAllSpam(String username){
         spamLists.get(username).clear();
     }
+    
+    /**
+     * moves an unread email to the read pile
+     * @param email the email to be marked as read
+     * @param username the user currently logged in
+     * @return whether or not the email was moved
+     */
+    public boolean markUnreadAsRead(Email email, String username){
+        if(unreadLists.get(username).remove(email)){
+            readLists.get(username).add(email);
+            return true;
+        }
+        return false;
+    }
 }

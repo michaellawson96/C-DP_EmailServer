@@ -5,10 +5,12 @@
  */
 package c.dp_client;
 
+import Core.Email;
 import Core.MySocket;
 import Core.ServerUtility;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -63,6 +65,59 @@ public class ClientApp {
         return opt;
     }
 
+    public int chooseUserMenu(){
+            int opt = -1;
+
+        do {
+            System.out.println("________________________________________________");
+            System.out.println("1) Send Email");
+            System.out.println("2) Unread");
+            System.out.println("3) Read");
+            System.out.println("3) Sent");
+            System.out.println("4) Spam");
+            System.out.println("5) Logout");
+            System.out.println("________________________________________________");
+            try{
+                opt = sc.nextInt();
+                sc.nextLine();
+            }
+            catch(InputMismatchException e)
+            {
+                System.out.println("Please enter a number between 1 and 5 as indicated by the menu above.");
+                opt = -1;
+                sc.nextLine();
+            }
+        } while (opt < 1 || opt > 5);
+
+        return opt;
+    }
+    
+    public int chooseUnreadMenu(ArrayList<Email> emails){
+        int opt = -1;
+        
+        do {
+            System.out.println("________________________________________________");
+            System.out.println("____________SELECT AN EMAIL TO OPEN_____________");
+            System.out.println("________________________________________________");
+            String message;
+            for (int i = 0; i < emails.size(); i++) {
+                System.out.println((i+1)+") From: " + emails.get(i).getSender() + " Subject: " + emails.get(i).getSubject());
+            }
+            System.out.println("________________________________________________");
+            try{
+                opt = sc.nextInt();
+                sc.nextLine();
+            }
+            catch(InputMismatchException e)
+            {
+                System.out.println("Please enter a number between 1 and " + emails.size() + " as indicated by the menu above.");
+                opt = -1;
+                sc.nextLine();
+            }
+        } while (opt < 1 || opt > 4);
+
+    }
+    
     public void startApp() throws IOException {
         Object email ;
         System.out.println("Welcome !!");

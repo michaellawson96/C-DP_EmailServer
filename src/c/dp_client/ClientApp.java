@@ -23,7 +23,7 @@ public class ClientApp {
     private String username;
     private Scanner sc = new Scanner(System.in);
     private MySocket dataSocket;
-    
+    private String currentFolder;
     
     public static void main(String[] args) {
         
@@ -192,11 +192,11 @@ public class ClientApp {
                     break;
                 //list unread email
                 case 2:
-                    readEmailMenu();
+                    unreadEmailMenu();
                     break;
                 //list read email
                 case 3:
-                    unreadEmailMenu();
+                    readEmailMenu();
                     break;
                 //list sent email
                 case 4:
@@ -276,7 +276,11 @@ public class ClientApp {
         if(response.equals(ServerUtility.NO_MAIL)){
             System.out.println("no unread mail was found");
         }
+        else if(response.isEmpty()||response == null){
+            System.out.println("Empty response");
+        }
         else{
+            System.out.println(response);
             ArrayList<Email> emails = objectifyEmailList(response);
             chooseEmailListMenu(emails);
         }

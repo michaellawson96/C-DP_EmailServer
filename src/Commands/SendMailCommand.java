@@ -21,6 +21,7 @@ public class SendMailCommand implements ServerCommand {
         String response;
         
         //Parse and store email
+        System.out.println("asdasdadddddddd" + msgArray[1]);
         Email e = ServerUtility.parseEmail(msgArray[1]);
         if (e != null) {
             mails.sendEmail(e);

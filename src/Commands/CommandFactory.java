@@ -29,6 +29,7 @@ public class CommandFactory {
                 break;
             case ServerUtility.SEND_MAIL:
                 com = new SendMailCommand();
+                break;
             case ServerUtility.VIEW_UNREAD_MAILS:
                 com = new ViewUnreadMailsCommand();
                 break;

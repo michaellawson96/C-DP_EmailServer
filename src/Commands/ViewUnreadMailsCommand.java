@@ -20,7 +20,7 @@ public class ViewUnreadMailsCommand implements ServerCommand {
     
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
-        String response = "";
+        String response;
         ArrayList<Email> unreadEmails = mails.getUnreadEmails(msgArray[1]);
         response = ServerUtility.stringify(unreadEmails);
         return response; 

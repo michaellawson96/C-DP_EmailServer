@@ -273,7 +273,7 @@ public class ClientApp {
         //make the message
         String clientMsg = ServerUtility.VIEW_UNREAD_MAILS + ServerUtility.COMMAND_BREAKING_CHAR + username;
         String response = serverRequest(clientMsg);
-        System.out.println("+++++++++++++++++" + response);
+
         if(response.equals(ServerUtility.NO_MAIL)){
             System.out.println("no unread mail was found");
         }

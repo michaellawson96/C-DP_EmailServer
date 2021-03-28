@@ -27,6 +27,9 @@ public class CommandFactory {
             case ServerUtility.REGISTER:
                 com = new RegisterCommand();
                 break;
+            case ServerUtility.VIEW_UNREAD_MAILS:
+                com = new ViewUnreadMailsCommand();
+                break;
             default:
                 com = new InvalidCommand();
                 break;

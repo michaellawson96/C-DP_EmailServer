@@ -20,57 +20,55 @@ import java.util.Scanner;
  * @author SeppQ
  */
 public class ServerApp {
+
     private EmailManager em;
     private UserManager um;
-    
-    
+
     public static void main(String[] args) {
+
         ServerApp serverApp = new ServerApp();
         serverApp.startApp();
     }
-    
-        public void startApp()
-    {
+
+    public void startApp() {
         //used to store emails
+   
         this.em = new EmailManager();
         this.um = new UserManager();
-        try
-        {
-            ReadingFromFile(um);
+        ReadingFromFile(um);
+        try {
+            
             Scanner sc = new Scanner(System.in);
             System.out.println("---- SERVER ----");
             // Create listening socket to accept connections through
             ServerSocket serverSocket = new ServerSocket(ServerUtility.SERVER_PORT);
             System.out.println("Waiting...");
-            while(true)
-            {
+            while (true) {
                 // Accept next client
+
                 MySocket client = new MySocket(serverSocket.accept());
-                
+
                 // Build handler to deal with this client's requests
-                ClientHandler clientHandlerJob = new ClientHandler(client, em , um);
+                ClientHandler clientHandlerJob = new ClientHandler(client, em, um);
                 // Allocate worker to this handler
                 Thread clientWorker = new Thread(clientHandlerJob);
                 // Start handler working with client
                 clientWorker.start();
-                
-                System.out.println("Type anthing to stop server");
-                sc.next();
-                writeUsertoFile(um);
+
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
+            writeUsertoFile(um);
         }
     }
-        
+
     public static void writeUsertoFile(UserManager um) {
         BufferedWriter outputWriter = null;
         try {
-            outputWriter = new BufferedWriter(new FileWriter("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
+            outputWriter = new BufferedWriter(new FileWriter("..\\Users.txt"));
             for (int i = 0; i < um.allUsers().size(); i++) {
 
-                outputWriter.write( um.allUsers().get(i) + ServerUtility.USER_CHAR);
+                outputWriter.write(um.allUsers().get(i).getUsername() + ServerUtility.USER_CHAR + um.allUsers().get(i).getPassword());
                 outputWriter.newLine();
             }
             outputWriter.flush();
@@ -78,21 +76,23 @@ public class ServerApp {
         } catch (IOException io) {
             System.out.println("Something went wrong");
         }
-    } 
-    
+    }
+
     public static void ReadingFromFile(UserManager um) {
         Scanner sc;
         try {
-            sc = new Scanner(new File("E:\\NetBeans Project\\C-DP_EmailServer\\src\\c\\dp_emailserver\\Users.txt"));
+            sc = new Scanner(new File("..\\Users.txt"));
             while (sc.hasNext()) {
                 String[] components = sc.next().split(ServerUtility.USER_CHAR);
-                User u = new User(components[0],components[1]);
+                User u = new User(components[0], components[1]);
+                System.out.println(u);
                 um.Register(u);
             }
             sc.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Something went wrong");
 
         }
-    }    
+    }
+
 }

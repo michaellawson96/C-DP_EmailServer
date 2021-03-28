@@ -9,7 +9,12 @@ import Commands.CommandFactory;
 import Commands.ServerCommand;
 import Core.MySocket;
 import Core.ServerUtility;
+import Core.User;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +36,7 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+       
         System.out.println("Client on " + client.getRemoteAddress());
 
         String message = "";
@@ -40,7 +46,7 @@ public class ClientHandler implements Runnable {
             String response = executeCommand(message);
             client.sendMessage(response);
         }
-
+         
         System.out.println("Now terminating with client on " + client.getRemoteAddress());
         try {
             client.close();

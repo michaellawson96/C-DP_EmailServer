@@ -18,7 +18,7 @@ public class ServerUtility {
     
     public final static String VIEW_MAIL = "getMail";
     public final static String NO_MAIL = "NONE";
-    
+    public final static String VIEW_UNREAD_MAILS = "getunreadmails";
     public final static String VIEW_SENT = "getSent";
     
     public final static String EXIT = "exit";
@@ -26,8 +26,8 @@ public class ServerUtility {
     
     public final static String COMMAND_BREAKING_CHAR = "%%%";
     public final static String EMAIL_COMPONENT_BREAKING_CHAR = "¬¬";
-    public final static String EMAIL_SEPARATOR_CHAR = "~~";
-    public final static String EMAIL_RECIPITENTS_CHAR = "%%";
+    public final static String EMAIL_SEPARATOR_CHAR = "%%";
+    public final static String EMAIL_RECIPITENTS_CHAR = "##";
     public final static String USER_CHAR = "%%";
     
     public final static String LOGIN = "login";

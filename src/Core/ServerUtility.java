@@ -63,7 +63,7 @@ public class ServerUtility {
         // Structure: sender¬¬recipient¬¬subject¬¬body
         
         System.out.println("you got here");
-        String [] Recipitents = components[4].split(EMAIL_RECIPITENTS_CHAR);
+        String [] Recipitents = components[3].split(EMAIL_RECIPITENTS_CHAR);
         if(components.length == 4)
         {
             

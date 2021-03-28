@@ -96,22 +96,17 @@ public class ClientApp {
     
     public int chooseEmailListMenu(ArrayList<Email> emails){
         int opt = -1;
-        System.out.println("________________________________________________");
-        System.out.println("____________SELECT AN EMAIL TO OPEN_____________");
-        System.out.println("________________________________________________");
-        String message;
-        for (int i = 0; i < emails.size(); i++) {
-            System.out.println((i+1)+") From: " + emails.get(i).getSender() + " Subject: " + emails.get(i).getSubject());
-        }
-        System.out.println((emails.size()+1)+") Back");
-        System.out.println("________________________________________________");
+        
         do {
             System.out.println("________________________________________________");
-            System.out.println("1) Move to Spam");
-            System.out.println("2) Delete");
-            System.out.println("3) Back");
+            System.out.println("____________SELECT AN EMAIL TO OPEN_____________");
             System.out.println("________________________________________________");
-            
+            String message;
+            for (int i = 0; i < emails.size(); i++) {
+                System.out.println((i+1)+") From: " + emails.get(i).getSender() + " Subject: " + emails.get(i).getSubject());
+            }
+            System.out.println((emails.size()+1)+") Back");
+            System.out.println("________________________________________________");
             try{
                 opt = sc.nextInt();
                 sc.nextLine();
@@ -122,7 +117,7 @@ public class ClientApp {
                 opt = -1;
                 sc.nextLine();
             }
-        } while (opt < 1 || opt > 3);
+        } while (opt < 1 || opt > (emails.size()+1));
         return opt;
     }
     
@@ -255,7 +250,7 @@ public class ClientApp {
         Email newEmail = new Email(username, subject, message, recArray);
         //make the message        
         //add everything to the msg except the recipient
-        String clientMsg = ServerUtility.SEND_MAIL + ServerUtility.COMMAND_BREAKING_CHAR + username + ServerUtility.EMAIL_SEPARATOR_CHAR + subject + ServerUtility.EMAIL_SEPARATOR_CHAR + message + ServerUtility.EMAIL_SEPARATOR_CHAR;
+        String clientMsg = ServerUtility.SEND_MAIL + ServerUtility.COMMAND_BREAKING_CHAR + username + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + subject + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + message + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR;
         //add first recipient
         clientMsg += recipients.get(0);
         for (int i = 1; i < recipients.size(); i++) {
@@ -275,23 +270,81 @@ public class ClientApp {
     }
     
     public void unreadEmailMenu(){
-        
+        //make the message
+        String clientMsg = ServerUtility.VIEW_UNREAD_MAILS + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        String response = serverRequest(clientMsg);
+        if(response.equals(ServerUtility.NO_MAIL)){
+            System.out.println("no unread mail was found");
+        }
+        else{
+            ArrayList<Email> emails = objectifyEmailList(response);
+            chooseEmailListMenu(emails);
+        }
+    }
+    
+    public ArrayList<Email> objectifyEmailList(String emails){
+        //seperate the emails
+        ArrayList<Email> emailList = new ArrayList<Email>();
+        String[] emailStrings = emails.split(ServerUtility.EMAIL_SEPARATOR_CHAR);
+        //for each email component
+        for(int i = 0; i < emailStrings.length; i++){
+            //sender%%subject%%message%%recipient##recipient
+            String[] emailComponents = emailStrings[i].split(ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR);
+            String[] recipients = emailComponents[3].split(ServerUtility.EMAIL_RECIPITENTS_CHAR);
+            emailList.add(new Email(emailComponents[0],emailComponents[0],emailComponents[0],recipients));
+        }
+        return emailList;
     }
     
     public void readEmailMenu(){
-        
+        //make the message
+        String clientMsg = ServerUtility.VIEW_READ_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        String response = serverRequest(clientMsg);
+        if(response.equals(ServerUtility.NO_MAIL)){
+            System.out.println("no read mail was found");
+        }
+        else{
+            ArrayList<Email> emails = objectifyEmailList(response);
+            chooseEmailListMenu(emails);
+        }
     }
     
     public void sentEmailMenu(){
-        
+        //make the message
+        String clientMsg = ServerUtility.VIEW_SENT_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        String response = serverRequest(clientMsg);
+        if(response.equals(ServerUtility.NO_MAIL)){
+            System.out.println("no sent mail was found");
+        }
+        else{
+            ArrayList<Email> emails = objectifyEmailList(response);
+            chooseEmailListMenu(emails);
+        }
     }
     
     public void spamEmailMenu() {
-
+//make the message
+        String clientMsg = ServerUtility.VIEW_SPAM_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        String response = serverRequest(clientMsg);
+        if(response.equals(ServerUtility.NO_MAIL)){
+            System.out.println("no spam mail was found");
+        }
+        else{
+            ArrayList<Email> emails = objectifyEmailList(response);
+            chooseEmailListMenu(emails);
+        }
     }
     
     public void deleteAllSpam(){
-        
+        //make the message
+        String clientMsg = ServerUtility.DELETE_ALL_SPAM + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        String response = serverRequest(clientMsg);
+        if(response.equals(ServerUtility.DONE)){
+            System.out.println("spam deleted");
+        }
+        else{
+            System.out.println("problem occured");
+        }
     }
     
     public String serverRequest(String message){

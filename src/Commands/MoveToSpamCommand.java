@@ -20,7 +20,7 @@ public class MoveToSpamCommand implements ServerCommand {
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response;
         
-        String[] arr = msgArray[1].split(ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR);
+        String[] arr = msgArray[1].split(ServerUtility.EMAIL_SEPARATOR_CHAR);
         
         
         String username = arr[0];

@@ -6,9 +6,8 @@
 package Commands;
 
 import Core.Email;
-import Core.ServerUtility;
-import Core.User;
 import c.dp_emailserver.EmailManager;
+import c.dp_emailserver.StringifyEmailList;
 import c.dp_emailserver.UserManager;
 import java.util.ArrayList;
 
@@ -18,20 +17,13 @@ import java.util.ArrayList;
  */
 public class ViewUnreadMailsCommand implements ServerCommand {
 
+    StringifyEmailList sel = new StringifyEmailList();
+    
     @Override
     public String execute(EmailManager mails, UserManager user, String[] msgArray) {
         String response = "";
         ArrayList<Email> unreadEmails = mails.getUnreadEmails(msgArray[1]);
-        if (unreadEmails != null) {
-            for (Email e : unreadEmails) {
-                String recipitents = "";
-                recipitents += e.getRecipients()[0]; 
-                for (int i = 1;i < e.getRecipients().length; i++) {
-                    recipitents += ServerUtility.EMAIL_RECIPITENTS_CHAR+ e.getRecipients()[i] ;
-                }
-                response += e.getSender() + ServerUtility.EMAIL_SEPARATOR_CHAR + e.getSubject() + ServerUtility.EMAIL_SEPARATOR_CHAR + e.getMessage() + ServerUtility.EMAIL_RECIPITENTS_CHAR + recipitents + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR;  
-            }
-        }
-        return response;
+        
+        return sel.stringify(unreadEmails);
     }
 }

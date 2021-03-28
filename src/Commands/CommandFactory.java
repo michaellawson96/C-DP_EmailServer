@@ -19,16 +19,14 @@ public class CommandFactory {
 
     public static ServerCommand createServerCommand(String commandName) {
         ServerCommand com;
-
+        
+    System.out.println(commandName);
         switch (commandName) {
             case ServerUtility.LOGIN:
                 com = new LoginCommand();
                 break;
             case ServerUtility.REGISTER:
                 com = new RegisterCommand();
-                break;
-            case ServerUtility.SEND_MAIL:
-                com = new SendMailCommand();
                 break;
             case ServerUtility.VIEW_UNREAD_MAILS:
                 com = new ViewUnreadMailsCommand();
@@ -59,6 +57,9 @@ public class CommandFactory {
                 break;
             case ServerUtility.MARK_UNREAD_AS_READ:
                 com = new MarkUnReadAsReadCommand();
+                break;
+            case ServerUtility.SEND_MAIL:
+                com = new SendMailCommand();
                 break;
             default:
                 com = new InvalidCommand();

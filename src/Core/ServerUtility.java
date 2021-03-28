@@ -38,8 +38,8 @@ public class ServerUtility {
     public final static String PROBLEM = "problem occured";
     
     public final static String COMMAND_BREAKING_CHAR = "%%%";
-    public final static String EMAIL_COMPONENT_BREAKING_CHAR = "¬¬";
-    public final static String EMAIL_SEPARATOR_CHAR = "%%";
+    public final static String EMAIL_SEPARATOR_CHAR = "¬¬";//
+    public final static String EMAIL_COMPONENT_BREAKING_CHAR = "%%";
     public final static String EMAIL_RECIPITENTS_CHAR = "##";
     public final static String USER_CHAR = "%%";
     public final static String USERNAME_CHAR = "&&&";
@@ -59,7 +59,7 @@ public class ServerUtility {
 
        public static Email parseEmail(String email)
     {
-        String [] components = email.split(EMAIL_COMPONENT_BREAKING_CHAR);
+        String [] components = email.split(EMAIL_SEPARATOR_CHAR);
         // Structure: sender¬¬recipient¬¬subject¬¬body
         
         System.out.println("you got here");
@@ -93,9 +93,9 @@ public class ServerUtility {
             recipitent += ServerUtility.EMAIL_RECIPITENTS_CHAR + recipitent;
         }
         
-        String response = e.get(0).getSender()+ ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + e.get(0).getSubject() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + e.get(0).getMessage() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + recipitent ; 
+        String response = e.get(0).getSender()+ ServerUtility.EMAIL_SEPARATOR_CHAR + e.get(0).getSubject() + ServerUtility.EMAIL_SEPARATOR_CHAR + e.get(0).getMessage() + ServerUtility.EMAIL_SEPARATOR_CHAR + recipitent ; 
         for(int i = 1 ; i < e.size() ; i++){
-           response += ServerUtility.EMAIL_SEPARATOR_CHAR +  e.get(0).getSender()+ ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + e.get(0).getSubject() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + e.get(0).getMessage() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + recipitent ;
+           response += ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR +  e.get(0).getSender()+ ServerUtility.EMAIL_SEPARATOR_CHAR + e.get(0).getSubject() + ServerUtility.EMAIL_SEPARATOR_CHAR + e.get(0).getMessage() + ServerUtility.EMAIL_SEPARATOR_CHAR + recipitent ;
         }
         
         return response;

@@ -31,7 +31,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(MySocket client, EmailManager em, UserManager um) {
         this.client = client;
         this.em = em;
-        this.um = um;
+        this.um = um;;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ClientHandler implements Runnable {
 
         ServerCommand c = CommandFactory.createServerCommand(msgArray[0]);
 
-        return c.execute(em, um, msgArray);
+        return c.execute(em, um, msgArray );
     }
 
 }

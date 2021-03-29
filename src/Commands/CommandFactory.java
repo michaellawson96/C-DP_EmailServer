@@ -19,8 +19,8 @@ public class CommandFactory {
 
     public static ServerCommand createServerCommand(String commandName) {
         ServerCommand com;
-        
-    System.out.println(commandName);
+
+        System.out.println(commandName);
         switch (commandName) {
             case ServerUtility.LOGIN:
                 com = new LoginCommand();
@@ -60,6 +60,9 @@ public class CommandFactory {
                 break;
             case ServerUtility.SEND_MAIL:
                 com = new SendMailCommand();
+                break;
+            case ServerUtility.TERMINATE:
+                com = new TerminateCommand();
                 break;
             default:
                 com = new InvalidCommand();

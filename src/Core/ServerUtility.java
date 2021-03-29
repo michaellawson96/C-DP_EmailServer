@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class ServerUtility {
 
     public final static int SERVER_PORT = 5000;
-
+    public final static String TERMINATE = "terminate";
     public final static String SEND_MAIL = "send";
     public final static String SUCCESSFUL_SEND = "SUCCESSFUL";
     public final static String FAILED_SEND = "FAILED";

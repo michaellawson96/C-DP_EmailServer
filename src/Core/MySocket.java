@@ -59,8 +59,7 @@ public class MySocket extends Socket
             this.msgIn = sockIn.readLine();
         } catch (IOException e)
         {
-           e.getMessage();
-           sockOut.close();
+           e.printStackTrace();
         }
         return msgIn;
     }

@@ -23,7 +23,7 @@ public class ServerApp {
 
     private EmailManager em;
     private UserManager um;
-
+    public  boolean serverSatus = true;
     public static void main(String[] args) {
 
         ServerApp serverApp = new ServerApp();
@@ -43,9 +43,8 @@ public class ServerApp {
             // Create listening socket to accept connections through
             ServerSocket serverSocket = new ServerSocket(ServerUtility.SERVER_PORT);
             System.out.println("Waiting...");
-            while (true) {
+            while (serverSatus) {
                 // Accept next client
-
                 MySocket client = new MySocket(serverSocket.accept());
 
                 // Build handler to deal with this client's requests
@@ -96,5 +95,6 @@ public class ServerApp {
 
         }
     }
+
 
 }

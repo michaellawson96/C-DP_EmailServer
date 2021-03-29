@@ -20,7 +20,6 @@ public class ClientAdminApp {
     private Scanner sc = new Scanner(System.in);
     private MySocket dataSocket;
 
-
     public static void main(String[] args) {
 
         ClientAdminApp clientAdminApp = new ClientAdminApp();
@@ -36,19 +35,23 @@ public class ClientAdminApp {
     }
 
     public void startApp() throws IOException {
-        Object email;
+
         System.out.println("To Terminate Server type Terminate!!");
         dataSocket = new MySocket("localhost", ServerUtility.SERVER_PORT);
-        String opt = sc.next();
+        String shut = sc.next();
+        boolean flag = true;
+        while(flag)
+        {
+            switch (shut) {
+                case "Terminate":
+                    String message = ServerUtility.TERMINATE;
+                    dataSocket.sendMessage(message);
+                    String response = dataSocket.receiveMessage();
+                    System.out.println(response);
+                    flag = false;
+                    break;
 
-        switch (opt) {
-            case "Terminate":
-                String message = ServerUtility.TERMINATE;
-                dataSocket.sendMessage(message);
-                String response = dataSocket.receiveMessage();
-                System.out.println(response);
-                break;
-
+            }
         }
 
     }

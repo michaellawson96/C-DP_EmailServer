@@ -23,11 +23,12 @@ public class ServerApp {
 
     private EmailManager em;
     private UserManager um;
-    public  boolean serverSatus = true;
+    public static boolean serverSatus = true;
     public static void main(String[] args) {
-
+        
         ServerApp serverApp = new ServerApp();
         serverApp.startApp();
+
     }
 
     public void startApp() {
@@ -42,24 +43,24 @@ public class ServerApp {
             System.out.println("---- SERVER ----");
             // Create listening socket to accept connections through
             ServerSocket serverSocket = new ServerSocket(ServerUtility.SERVER_PORT);
+            
             System.out.println("Waiting...");
             while (serverSatus) {
                 // Accept next client
                 MySocket client = new MySocket(serverSocket.accept());
 
                 // Build handler to deal with this client's requests
+
                 ClientHandler clientHandlerJob = new ClientHandler(client, em, um);
                 // Allocate worker to this handler
                 Thread clientWorker = new Thread(clientHandlerJob);
                 // Start handler working with client
-                clientWorker.start();
-                
-                
+                clientWorker.start();            
             }
             
         } catch (Exception e) {
             e.printStackTrace();
-            
+          
         }
     }
 
@@ -95,6 +96,9 @@ public class ServerApp {
 
         }
     }
-
+    public static void TerminateServer(){
+        System.out.println("Server Shutting Down");
+        serverSatus = false;
+    }
 
 }

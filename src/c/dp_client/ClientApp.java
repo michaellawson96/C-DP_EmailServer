@@ -24,22 +24,19 @@ public class ClientApp {
     private Scanner sc = new Scanner(System.in);
     private MySocket dataSocket;
     private String curFolder;
-    
+
     public static void main(String[] args) {
-        
-         ClientApp clientApp = new ClientApp();
-        try
-        {
+
+        ClientApp clientApp = new ClientApp();
+        try {
             clientApp.startApp();
-        } catch (UnknownHostException e)
-        {
+        } catch (UnknownHostException e) {
             System.out.println("Problem occured when finding host");
             e.printStackTrace();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Problem occured when interacting with server");
             e.printStackTrace();
-        }       
+        }
     }
 
     public int chooseLoginRegister() {
@@ -51,12 +48,10 @@ public class ClientApp {
             System.out.println("2) Register");
             System.out.println("3) Exit");
             System.out.println("________________________________________________");
-            try{
+            try {
                 opt = sc.nextInt();
                 sc.nextLine();
-            }
-            catch(InputMismatchException e)
-            {
+            } catch (InputMismatchException e) {
                 System.out.println("Please enter a number between 1 and 3 as indicated by the menu above.");
                 opt = -1;
                 sc.nextLine();
@@ -66,8 +61,8 @@ public class ClientApp {
         return opt;
     }
 
-    public int chooseUserMenu(){
-            int opt = -1;
+    public int chooseUserMenu() {
+        int opt = -1;
 
         do {
             System.out.println("________________________________________________");
@@ -79,12 +74,10 @@ public class ClientApp {
             System.out.println("6) Delete All Spam");
             System.out.println("7) Logout");
             System.out.println("________________________________________________");
-            try{
+            try {
                 opt = sc.nextInt();
                 sc.nextLine();
-            }
-            catch(InputMismatchException e)
-            {
+            } catch (InputMismatchException e) {
                 System.out.println("Please enter a number between 1 and 6 as indicated by the menu above.");
                 opt = -1;
                 sc.nextLine();
@@ -93,36 +86,46 @@ public class ClientApp {
 
         return opt;
     }
-    
-    public int chooseEmailListMenu(ArrayList<Email> emails){
+
+    public int chooseEmailListMenu(ArrayList<Email> emails) {
         int opt = -1;
-        
+
         do {
             System.out.println("________________________________________________");
             System.out.println("____________SELECT AN EMAIL TO OPEN_____________");
             System.out.println("________________________________________________");
             String message;
             for (int i = 0; i < emails.size(); i++) {
-                System.out.println((i+1)+") From: " + emails.get(i).getSender() + " Subject: " + emails.get(i).getSubject());
+                System.out.println((i + 1) + ") From: " + emails.get(i).getSender() + " Subject: " + emails.get(i).getSubject());
             }
-            System.out.println((emails.size()+1)+") Back");
+            System.out.println((emails.size() + 1) + ") Back");
             System.out.println("________________________________________________");
-            try{
+            try {
                 opt = sc.nextInt();
                 sc.nextLine();
-            }
-            catch(InputMismatchException e)
-            {
+            } catch (InputMismatchException e) {
                 System.out.println("Please enter a number between 1 and 3 as indicated by the menu above.");
                 opt = -1;
                 sc.nextLine();
             }
-        } while (opt < 1 || opt > (emails.size()+1));
+        } while (opt < 1 || opt > (emails.size() + 1));
         return opt;
     }
-    
-    public int chooseEmailMenu(Email email){
-        int opt = -1, optMax=3;
+
+    public void markasRead(Email email) {
+        String clientMsg = ServerUtility.MARK_UNREAD_AS_READ + ServerUtility.COMMAND_BREAKING_CHAR + username + ServerUtility.USERNAME_CHAR + email.getSender()+ ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR  + email.getSubject() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR + email.getMessage() + ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR;
+        //add first recipient
+        clientMsg += email.getRecipients()[0];
+        for (int i = 1; i < email.getRecipients().length; i++) {
+            //add the seperator and current recipient to message
+            clientMsg += ServerUtility.EMAIL_RECIPITENTS_CHAR + email.getRecipients()[i];
+        }
+        
+        System.out.println(serverRequest(clientMsg));
+    }
+
+    public int chooseEmailMenu(Email email) {
+        int opt = -1, optMax = 3;
         System.out.println("________________________________________________");
         System.out.println("From: " + email.getSender());
         String recipients = "";
@@ -132,29 +135,25 @@ public class ClientApp {
         System.out.println("To: " + recipients);
         System.out.println(email.getMessage());
         System.out.println("________________________________________________");
-        
+        markasRead(email);
         do {
-            if(curFolder.equals(ServerUtility.VIEW_UNREAD_MAILS)||curFolder.equals(ServerUtility.VIEW_READ_EMAIL)){
-            System.out.println("________________________________________________");
-            System.out.println("1) Move to Spam");
-            System.out.println("2) Delete");
-            System.out.println("3) Back");
-            System.out.println("________________________________________________");
-            }
-
-            else{
+            if (curFolder.equals(ServerUtility.VIEW_UNREAD_MAILS) || curFolder.equals(ServerUtility.VIEW_READ_EMAIL)) {
+                System.out.println("________________________________________________");
+                System.out.println("1) Move to Spam");
+                System.out.println("2) Delete");
+                System.out.println("3) Back");
+                System.out.println("________________________________________________");
+            } else {
                 optMax = 2;
-            System.out.println("________________________________________________");
-            System.out.println("1) Delete");
-            System.out.println("2) Back");
-            System.out.println("________________________________________________");
+                System.out.println("________________________________________________");
+                System.out.println("1) Delete");
+                System.out.println("2) Back");
+                System.out.println("________________________________________________");
             }
-            try{
+            try {
                 opt = sc.nextInt();
                 sc.nextLine();
-            }
-            catch(InputMismatchException e)
-            {
+            } catch (InputMismatchException e) {
                 System.out.println("Please enter a number between 1 and 3 as indicated by the menu above.");
                 opt = -1;
                 sc.nextLine();
@@ -162,10 +161,9 @@ public class ClientApp {
         } while (opt < 1 || opt > optMax);
         return opt;
     }
-    
-    
+
     public void startApp() throws IOException {
-        Object email ;
+        Object email;
         System.out.println("Welcome !!");
         dataSocket = new MySocket("localhost", ServerUtility.SERVER_PORT);
         int opt;
@@ -173,10 +171,10 @@ public class ClientApp {
             opt = chooseLoginRegister();
             switch (opt) {
                 case 1:
-                    email =  login();
-                    if(email instanceof String){
+                    email = login();
+                    if (email instanceof String) {
                         System.out.println("Welcome " + email);
-                        username = (String)email;
+                        username = (String) email;
                         userMenu();
                     }
                     break;
@@ -190,8 +188,7 @@ public class ClientApp {
         } while (opt != 3);
     }
 
-    
-    public void userMenu(){
+    public void userMenu() {
         int opt;
         do {
             opt = chooseUserMenu();
@@ -221,41 +218,40 @@ public class ClientApp {
                     deleteAllSpam();
                     break;
                 //logout == 7
-                
+
             }
         } while (opt != 7);
         username = null;
         System.out.println("Logout successful");
     }
-    
-    public void newEmailMenu(){
+
+    public void newEmailMenu() {
         ArrayList<String> recipients = new ArrayList<String>();
         System.out.println("Enter a user's email address to send to");
         recipients.add(sc.nextLine());
-        
+
         String output = null;
         //recipients
-        do{
+        do {
             System.out.println("Enter another users email address to send to or -1 to move on");
             output = sc.nextLine();
-            if(!output.equals("-1")){
-             if(!recipients.contains(output)){
-                 recipients.add(output);
-             }    
-             else{
-                 System.out.println("recipient already set");
-             }
+            if (!output.equals("-1")) {
+                if (!recipients.contains(output)) {
+                    recipients.add(output);
+                } else {
+                    System.out.println("recipient already set");
+                }
             }
-        }while(!output.equals("-1"));
+        } while (!output.equals("-1"));
         //subject
         System.out.println("Enter a subject");
         String subject = sc.nextLine();
         //message
         System.out.println("Enter a message");
         String message = sc.nextLine();
-        
-        String[] recArray = recipients.toArray(new String [recipients.size()]);
-                
+
+        String[] recArray = recipients.toArray(new String[recipients.size()]);
+
         //email object made
         Email newEmail = new Email(username, subject, message, recArray);
         //make the message        
@@ -271,96 +267,97 @@ public class ClientApp {
         System.out.println(clientMsg);
         String response = serverRequest(clientMsg);
         //if the expected responce is received
-        if(response!=null){
+        if (response != null) {
             System.out.println(response);
-        }
-        else{
+        } else {
             System.out.println("Something went wrong on server side");
         }
     }
-    
-    
-    
-    public ArrayList<Email> objectifyEmailList(String emails){
+
+    public ArrayList<Email> objectifyEmailList(String emails) {
         //seperate the emails
         ArrayList<Email> emailList = new ArrayList<Email>();
         String[] emailStrings = emails.split(ServerUtility.EMAIL_SEPARATOR_CHAR);
         //for each email component
-        for(int i = 0; i < emailStrings.length; i++){
+        for (int i = 0; i < emailStrings.length; i++) {
             //sender%%subject%%message%%recipient##recipient
             String[] emailComponents = emailStrings[i].split(ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR);
             String[] recipients = emailComponents[3].split(ServerUtility.EMAIL_RECIPITENTS_CHAR);
-            emailList.add(new Email(emailComponents[0],emailComponents[1],emailComponents[2],recipients));
+            emailList.add(new Email(emailComponents[0], emailComponents[1], emailComponents[2], recipients));
         }
         return emailList;
     }
-    
-    public void unreadEmailMenu(){
+
+    public void unreadEmailMenu() {
+        curFolder = ServerUtility.VIEW_UNREAD_MAILS;
         generalEmailMenu(ServerUtility.VIEW_UNREAD_MAILS);
     }
-    
-    public void readEmailMenu(){
+
+    public void readEmailMenu() {
         //make the message
+        curFolder = ServerUtility.VIEW_READ_EMAIL;
         generalEmailMenu(ServerUtility.VIEW_READ_EMAIL);
     }
-    
-    public void sentEmailMenu(){
-        //make the message
+
+    public void sentEmailMenu() {
+        curFolder = ServerUtility.VIEW_SENT_EMAIL;
         generalEmailMenu(ServerUtility.VIEW_SENT_EMAIL);
     }
-    
+
     public void spamEmailMenu() {
+        curFolder = ServerUtility.VIEW_SPAM_EMAIL;
 //make the message
         generalEmailMenu(ServerUtility.VIEW_SPAM_EMAIL);
     }
-    
-    public void generalEmailMenu(String viewType){
+
+    public void generalEmailMenu(String viewType) {
         //make the message
         String clientMsg = viewType + ServerUtility.COMMAND_BREAKING_CHAR + username;
         String response = serverRequest(clientMsg);
 
-        if(response.equals(ServerUtility.NO_MAIL)){
+        if (response.equals(ServerUtility.NO_MAIL)) {
             System.out.println("no unread mail was found");
-        }
-        else if(response.isEmpty()||response == null){
+        } else if (response.isEmpty() || response == null) {
             System.out.println("Empty response");
-        }
-        else{
+        } else {
             System.out.println(response);
             ArrayList<Email> emails = objectifyEmailList(response);
-            
-            
+
             //loop into menu
+            String message;
             int opt = -1;
-            do{
+            int choice = -1;
+            do {
                 opt = chooseEmailListMenu(emails);
-                if(opt >0 && opt<= (emails.size())){
-                    chooseEmailMenu(emails.get(opt-1));
+                if (opt > 0 && opt <= (emails.size())) {
+                    choice = chooseEmailMenu(emails.get(opt - 1));
+                    if (choice == 1) {
+                        message = ServerUtility.MOVE_TO_SPAM + ServerUtility.COMMAND_BREAKING_CHAR + username + ServerUtility.USER_CHAR;
+                    }
                 }
-            }while(opt!=(emails.size()+1));
+            } while (opt != (emails.size() + 1));
         }
     }
-    
-    public void deleteAllSpam(){
+
+    public void deleteAllSpam() {
         //make the message
         String clientMsg = ServerUtility.DELETE_ALL_SPAM + ServerUtility.COMMAND_BREAKING_CHAR + username;
         String response = serverRequest(clientMsg);
-        if(response.equals(ServerUtility.DONE)){
+        if (response.equals(ServerUtility.DONE)) {
             System.out.println("spam deleted");
-        }
-        else{
+        } else {
             System.out.println("problem occured");
         }
     }
-    
-    public String serverRequest(String message){
+
+    public String serverRequest(String message) {
 
         dataSocket.sendMessage(message);
 
         String response = dataSocket.receiveMessage();
         return response;
     }
-    
+
     public Object login() {
         System.out.println("Enter Your Email");
         String email = sc.nextLine();

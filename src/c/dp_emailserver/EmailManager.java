@@ -12,11 +12,13 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Manages the Emails. Stores who's received, opened, set as spam or sent any emails
+ * Manages the Emails. Stores who's received, opened, set as spam or sent any
+ * emails
+ *
  * @author Michael Lawson
  */
 public class EmailManager {
-    
+
     private HashMap<String, ArrayList<Email>> readLists = new HashMap(); //records what emails the user (email address of user is the key) has received and read
     private HashMap<String, ArrayList<Email>> unreadLists = new HashMap();
     private HashMap<String, ArrayList<Email>> spamLists = new HashMap();
@@ -28,24 +30,25 @@ public class EmailManager {
      */
     public EmailManager() {
     }
-    
+
     /**
      * Sends an email to each recipient
+     *
      * @param email The email being sent
-     * @param sender The email address of the user being 
-     * @param recipients An array containing a list of the User's email addresses
-     * that the email will be sent to
+     * @param sender The email address of the user being
+     * @param recipients An array containing a list of the User's email
+     * addresses that the email will be sent to
      */
-    public void sendEmail(Email email){
-       //for each recipent
-       for(String r: email.getRecipients()){
-           //if the recipient is not a key in the unreadlists
-           if (!unreadLists.containsKey(r)) {
-               unreadLists.put(r, new ArrayList<Email>());
-           }
-           //add the email into the recipient's unread email list
-           unreadLists.get(r).add(email);
-       }
+    public void sendEmail(Email email) {
+        //for each recipent
+        for (String r : email.getRecipients()) {
+            //if the recipient is not a key in the unreadlists
+            if (!unreadLists.containsKey(r)) {
+                unreadLists.put(r, new ArrayList<Email>());
+            }
+            //add the email into the recipient's unread email list
+            unreadLists.get(r).add(email);
+        }
 //       if the recipient is not a key in the unreadlists
         if (!sentLists.containsKey(email.getSender())) {
             sentLists.put(email.getSender(), new ArrayList<Email>());
@@ -53,130 +56,132 @@ public class EmailManager {
         //add the email into the recipient's unread email list
         sentLists.get(email.getSender()).add(email);
     }
-    
+
     /**
      * Get all of the unread emails for the given username (email address)
+     *
      * @param username the current user's email address
      * @return an arraylist of unread emails or null if there are none
      */
-    public ArrayList<Email> getUnreadEmails(String username){
+    public ArrayList<Email> getUnreadEmails(String username) {
         //if there are any emails in this user's unread list
-        if(unreadLists.containsKey(username)){
+        if (unreadLists.containsKey(username)) {
             return unreadLists.get(username);
-        }
-        //if there were no unread emails for this user
-        else{
+        } //if there were no unread emails for this user
+        else {
             return null;
         }
     }
-    
+
     /**
      * Get all of the read emails for the given username (email address)
+     *
      * @param username the current user's email address
      * @return an arraylist of read emails or null if there are none
      */
-    public ArrayList<Email> getReadEmails(String username){
+    public ArrayList<Email> getReadEmails(String username) {
         //if there are any emails in this user's read list
-        if(readLists.containsKey(username)){
+        if (readLists.containsKey(username)) {
             return readLists.get(username);
-        }
-        //if there were no read emails for this user
-        else{
+        } //if there were no read emails for this user
+        else {
             return null;
         }
     }
-    
+
     /**
      * Get all of the spam emails for the given username (email address)
+     *
      * @param username the current user's email address
      * @return an arraylist of spam emails or null if there are none
      */
-    public ArrayList<Email> getSpamEmails(String username){
+    public ArrayList<Email> getSpamEmails(String username) {
         //if there are any emails in this user's spam list
-        if(spamLists.containsKey(username)){
+        if (spamLists.containsKey(username)) {
             return spamLists.get(username);
-        }
-        //if there were no spam emails for this user
-        else{
+        } //if there were no spam emails for this user
+        else {
             return null;
         }
     }
-    
+
     /**
-     * get all of the emails sent by a user specified by username (email address)
+     * get all of the emails sent by a user specified by username (email
+     * address)
+     *
      * @param username the current user's email address
      * @return an arraylist of sent emails or null if there are none
      */
-    public ArrayList<Email> getSentEmails(String username){
+    public ArrayList<Email> getSentEmails(String username) {
         //if there are any emails in this user's sent list
-        if(spamLists.containsKey(username)){
+        if (spamLists.containsKey(username)) {
             return spamLists.get(username);
-        }
-        //if there were no sent emails for this user
-        else{
+        } //if there were no sent emails for this user
+        else {
             return null;
         }
     }
-    
+
     /**
-     * Search a user's emails and return a list of emails that match the type, 
+     * Search a user's emails and return a list of emails that match the type,
      * location and query combination given
-     * @param type the field that will be compared against the query (sender, 
+     *
+     * @param type the field that will be compared against the query (sender,
      * recipient, subject, message)
      * @param location which folder will be checked for existing emails (unread,
-     * read, spam, sent) 
-     * @param query each email in the specified location will be checked to see 
+     * read, spam, sent)
+     * @param query each email in the specified location will be checked to see
      * if the value in the field type specified contains this query string
-     * @param username the email address of the user whose emails are being 
+     * @param username the email address of the user whose emails are being
      * searched
      * @return a list of filtered emails that meet the request
      */
-    public ArrayList<Email> searchEmails(String type, String location, String query, String username){
+    public ArrayList<Email> searchEmails(String type, String location, String query, String username) {
         //make an empty array list to populate with emails
         ArrayList<Email> emails = null;
-;        //find out which location the method is trying to search
-        switch(location){
+        ;        //find out which location the method is trying to search
+        switch (location) {
             case "unread":
                 emails = getUnreadEmails(username);
                 break;
-                
+
             case "read":
                 emails = getReadEmails(username);
                 break;
-                
+
             case "spam":
                 emails = getSpamEmails(username);
                 break;
-                
+
             case "sent":
                 emails = getSentEmails(username);
                 break;
         }
         //if there are emails to search through
-        if(emails!= null){
+        if (emails != null) {
             //filter the emails out based on search type
             //make a copy first
             ArrayList<Email> filteredEmails = new ArrayList<Email>();
-            switch(type){
+            switch (type) {
                 //if searching by sender (appropriate for all lists except sent)
                 case "sender":
                     //iterate through the emails
-                    for(Email e : emails){
+                    for (Email e : emails) {
                         //if the current email sender's username contains characters from the query
-                        if(e.getSender().contains(query)){
+                        if (e.getSender().contains(query)) {
                             //add it to the filtered list of emails
                             filteredEmails.add(e);
                         }
                     }
                     break;
-                    
+
                 case "recipent":
                     //iterate through the emails
-                    for(Email e : emails){
+                    for (Email e : emails) {
                         //iterate through the recipent addresses of thecurrent email
-                        for(String r : Arrays.asList(e.getRecipients())){
+                        for (String r : Arrays.asList(e.getRecipients())) {
                             //if the current email contains a recipent with a username containing the query
-                            if(r.contains(query)){
+                            if (r.contains(query)) {
                                 //add it to the filtered list of emails
                                 filteredEmails.add(e);
                             }
@@ -184,23 +189,23 @@ public class EmailManager {
                         }
                     }
                     break;
-                
+
                 case "subject":
                     //iterate through the emails
-                    for(Email e : emails){
+                    for (Email e : emails) {
                         //if the current email's subject contains characters from the query
-                        if(e.getSubject().contains(query)){
+                        if (e.getSubject().contains(query)) {
                             //add it to the filtered list of emails
                             filteredEmails.add(e);
                         }
                     }
                     break;
-                
+
                 case "message":
                     //iterate through the emails
-                    for(Email e : emails){
+                    for (Email e : emails) {
                         //if the current email's message contains characters from the query
-                        if(e.getMessage().contains(query)){
+                        if (e.getMessage().contains(query)) {
                             //add it to the filtered list of emails
                             filteredEmails.add(e);
                         }
@@ -212,30 +217,34 @@ public class EmailManager {
         }
         return emails;
     }
+
     /**
      * deletes an email sent by a user from their sent list
+     *
      * @param email the email that should be deleted
      * @param username the email address of the user that requested the delete
      * @return a boolean representation of success
      */
-    public boolean deleteSentEmail(Email email, String username){
+    public boolean deleteSentEmail(Email email, String username) {
         //locking the sent email list so that it can't be modified during deleting
         //an attempt will be made to delete the given email from the user's sent list with a boolean representation of success being returned
         return sentLists.get(username).remove(email);
     }
-    
+
     /**
-     * deletes an email sent to the current user from a specified list belonging to them
+     * deletes an email sent to the current user from a specified list belonging
+     * to them
+     *
      * @param email the email that should be deleted
      * @param username the email address of the user that requested the delete
      * @param location the list location that the email will be deleted from
      * @return a boolean representation of success
      */
-    public boolean deleteReceivedEmail(Email email, String username, String location){
-         //locking the sent email list so that it can't be modified during deleting
+    public boolean deleteReceivedEmail(Email email, String username, String location) {
+        //locking the sent email list so that it can't be modified during deleting
         //an attempt will be made to delete the given email from the specified email list with a boolean representation of success being returned
         boolean success = false;
-        switch(location){
+        switch (location) {
             //delete from the unread list
             case "unread":
                 success = unreadLists.get(username).remove(email);
@@ -251,19 +260,21 @@ public class EmailManager {
         }
         return success;
     }
-    
+
     /**
-     * moves an email sent to the current user from a specified list belonging to them to spam
+     * moves an email sent to the current user from a specified list belonging
+     * to them to spam
+     *
      * @param email the email that should be deleted
      * @param username the email address of the user that requested the delete
      * @param location the list location that the email will be moved from
      * @return a boolean representation of success
      */
-    public boolean moveEmailToSpam(Email email, String username, String location){
-         //locking the sent email list so that it can't be modified during deleting
+    public boolean moveEmailToSpam(Email email, String username, String location) {
+        //locking the sent email list so that it can't be modified during deleting
         //an attempt will be made to delete the given email from the specified email list with a boolean representation of success being returned
         boolean success = false;
-        switch(location){
+        switch (location) {
             //delete from the unread list
             case "unread":
                 success = unreadLists.get(username).remove(email);
@@ -273,30 +284,39 @@ public class EmailManager {
                 success = readLists.get(username).remove(email);
                 break;
         }
-        if(success){
+        if (success) {
             spamLists.get(username).add(email);
         }
         return success;
     }
-    
+
     /**
      * clears all emails from the spam list of the current user
+     *
      * @param username the email address of the current user
      */
-    public void deleteAllSpam(String username){
+    public void deleteAllSpam(String username) {
         spamLists.get(username).clear();
     }
-    
+
     /**
      * moves an unread email to the read pile
+     *
      * @param email the email to be marked as read
      * @param username the user currently logged in
      * @return whether or not the email was moved
      */
-    public boolean markUnreadAsRead(Email email, String username){
-        if(unreadLists.get(username).remove(email)){
-            readLists.get(username).add(email);
-            return true;
+    public boolean markUnreadAsRead(Email email, String username) {
+        if (unreadLists.get(username).remove(email)) {
+            if (readLists.containsKey(username)) {
+                readLists.get(username).add(email);
+                return true;
+            } else {
+                readLists.put(username, new ArrayList<Email>());
+                readLists.get(username).add(email);
+                return true;
+            }
+
         }
         return false;
     }

@@ -5,6 +5,7 @@
  */
 package Commands;
 
+
 import Core.ServerUtility;
 import c.dp_emailserver.EmailManager;
 import c.dp_emailserver.ServerApp;
@@ -17,8 +18,7 @@ import c.dp_emailserver.UserManager;
 public class TerminateCommand implements ServerCommand{
     @Override
     public String execute(EmailManager mails,UserManager user, String[] msgArray) {
-        ServerApp app = new ServerApp();
-        app.serverSatus = false;
+        //ServerApp.writeUsertoFile(user);
         return ServerUtility.TERMINATE;
     }    
 

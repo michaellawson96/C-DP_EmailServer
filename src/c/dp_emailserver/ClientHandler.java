@@ -36,22 +36,31 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-       
+
         System.out.println("Client on " + client.getRemoteAddress());
 
         String message = "";
 
         while (!message.equals(ServerUtility.EXIT)) {
             message = client.receiveMessage();
-            
+            if (message.equals(ServerUtility.TERMINATE)) {
+                try {
+                    client.close();
+                    client.shutdownInput();
+                    client.shutdownOutput();
+                    ServerApp.TerminateServer();
+                } catch (IOException ex) {
+                    Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             //TO BE REMOVED
             System.out.println(message);
             //TO BE REMOVED
-            
+
             String response = executeCommand(message);
             client.sendMessage(response);
         }
-         
+
         System.out.println("Now terminating with client on " + client.getRemoteAddress());
         try {
             client.close();
@@ -65,7 +74,7 @@ public class ClientHandler implements Runnable {
 
         ServerCommand c = CommandFactory.createServerCommand(msgArray[0]);
 
-        return c.execute(em, um, msgArray );
+        return c.execute(em, um, msgArray);
     }
 
 }

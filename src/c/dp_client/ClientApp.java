@@ -296,7 +296,7 @@ public class ClientApp {
             //sender%%subject%%message%%recipient##recipient
             String[] emailComponents = emailStrings[i].split(ServerUtility.EMAIL_COMPONENT_BREAKING_CHAR);
             String[] recipients = emailComponents[3].split(ServerUtility.EMAIL_RECIPITENTS_CHAR);
-            emailList.add(new Email(emailComponents[0],emailComponents[0],emailComponents[0],recipients));
+            emailList.add(new Email(emailComponents[0],emailComponents[1],emailComponents[2],recipients));
         }
         return emailList;
     }

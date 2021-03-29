@@ -46,12 +46,12 @@ public class EmailManager {
            //add the email into the recipient's unread email list
            unreadLists.get(r).add(email);
        }
-       //if the recipient is not a key in the unreadlists
+//       if the recipient is not a key in the unreadlists
         if (!sentLists.containsKey(email.getSender())) {
-            unreadLists.put(email.getSender(), new ArrayList<Email>());
+            sentLists.put(email.getSender(), new ArrayList<Email>());
         }
         //add the email into the recipient's unread email list
-        unreadLists.get(email.getSender()).add(email);
+        sentLists.get(email.getSender()).add(email);
     }
     
     /**

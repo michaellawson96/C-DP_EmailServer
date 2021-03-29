@@ -23,7 +23,7 @@ public class ClientApp {
     private String username;
     private Scanner sc = new Scanner(System.in);
     private MySocket dataSocket;
-    private String currentFolder;
+    private String curFolder;
     
     public static void main(String[] args) {
         
@@ -122,7 +122,7 @@ public class ClientApp {
     }
     
     public int chooseEmailMenu(Email email){
-        int opt = -1;
+        int opt = -1, optMax=3;
         System.out.println("________________________________________________");
         System.out.println("From: " + email.getSender());
         String recipients = "";
@@ -134,11 +134,21 @@ public class ClientApp {
         System.out.println("________________________________________________");
         
         do {
+            if(curFolder.equals(ServerUtility.VIEW_UNREAD_MAILS)||curFolder.equals(ServerUtility.VIEW_READ_EMAIL)){
             System.out.println("________________________________________________");
             System.out.println("1) Move to Spam");
             System.out.println("2) Delete");
             System.out.println("3) Back");
             System.out.println("________________________________________________");
+            }
+
+            else{
+                optMax = 2;
+            System.out.println("________________________________________________");
+            System.out.println("1) Delete");
+            System.out.println("2) Back");
+            System.out.println("________________________________________________");
+            }
             try{
                 opt = sc.nextInt();
                 sc.nextLine();
@@ -149,7 +159,7 @@ public class ClientApp {
                 opt = -1;
                 sc.nextLine();
             }
-        } while (opt < 1 || opt > 3);
+        } while (opt < 1 || opt > optMax);
         return opt;
     }
     
@@ -269,23 +279,7 @@ public class ClientApp {
         }
     }
     
-    public void unreadEmailMenu(){
-        //make the message
-        String clientMsg = ServerUtility.VIEW_UNREAD_MAILS + ServerUtility.COMMAND_BREAKING_CHAR + username;
-        String response = serverRequest(clientMsg);
-
-        if(response.equals(ServerUtility.NO_MAIL)){
-            System.out.println("no unread mail was found");
-        }
-        else if(response.isEmpty()||response == null){
-            System.out.println("Empty response");
-        }
-        else{
-            System.out.println(response);
-            ArrayList<Email> emails = objectifyEmailList(response);
-            chooseEmailListMenu(emails);
-        }
-    }
+    
     
     public ArrayList<Email> objectifyEmailList(String emails){
         //seperate the emails
@@ -301,42 +295,49 @@ public class ClientApp {
         return emailList;
     }
     
+    public void unreadEmailMenu(){
+        generalEmailMenu(ServerUtility.VIEW_UNREAD_MAILS);
+    }
+    
     public void readEmailMenu(){
         //make the message
-        String clientMsg = ServerUtility.VIEW_READ_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
-        String response = serverRequest(clientMsg);
-        if(response.equals(ServerUtility.NO_MAIL)){
-            System.out.println("no read mail was found");
-        }
-        else{
-            ArrayList<Email> emails = objectifyEmailList(response);
-            chooseEmailListMenu(emails);
-        }
+        generalEmailMenu(ServerUtility.VIEW_READ_EMAIL);
     }
     
     public void sentEmailMenu(){
         //make the message
-        String clientMsg = ServerUtility.VIEW_SENT_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
-        String response = serverRequest(clientMsg);
-        if(response.equals(ServerUtility.NO_MAIL)){
-            System.out.println("no sent mail was found");
-        }
-        else{
-            ArrayList<Email> emails = objectifyEmailList(response);
-            chooseEmailListMenu(emails);
-        }
+        generalEmailMenu(ServerUtility.VIEW_SENT_EMAIL);
     }
     
     public void spamEmailMenu() {
 //make the message
-        String clientMsg = ServerUtility.VIEW_SPAM_EMAIL + ServerUtility.COMMAND_BREAKING_CHAR + username;
+        generalEmailMenu(ServerUtility.VIEW_SPAM_EMAIL);
+    }
+    
+    public void generalEmailMenu(String viewType){
+        //make the message
+        String clientMsg = viewType + ServerUtility.COMMAND_BREAKING_CHAR + username;
         String response = serverRequest(clientMsg);
+
         if(response.equals(ServerUtility.NO_MAIL)){
-            System.out.println("no spam mail was found");
+            System.out.println("no unread mail was found");
+        }
+        else if(response.isEmpty()||response == null){
+            System.out.println("Empty response");
         }
         else{
+            System.out.println(response);
             ArrayList<Email> emails = objectifyEmailList(response);
-            chooseEmailListMenu(emails);
+            
+            
+            //loop into menu
+            int opt = -1;
+            do{
+                opt = chooseEmailListMenu(emails);
+                if(opt >0 && opt<= (emails.size())){
+                    chooseEmailMenu(emails.get(opt-1));
+                }
+            }while(opt!=(emails.size()+1));
         }
     }
     
